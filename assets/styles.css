@@ -154,14 +154,3 @@ section { scroll-margin-top: var(--scroll-offset); }
 #theme-toggle:hover { background: rgba(13,110,253,0.06); }
 .theme-dark #theme-toggle:hover { background: rgba(255,255,255,0.06); }
 
-/* Mobile access block (or ig lack of access is a better way of saying it lol) */
-#mobile-block { display: none; position: fixed; inset: 0; z-index: 2000; align-items: center; justify-content: center; padding: 24px; background: var(--body-bg); }
-#mobile-block .mobile-card { width: 100%; max-width: 520px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); padding: 24px; text-align: center; }
-#mobile-block .mobile-emoji { font-size: 2rem; margin-bottom: 8px; }
-#mobile-block .mobile-title { font-weight: 800; margin-bottom: 8px; }
-#mobile-block .mobile-text { color: var(--muted); margin: 0; }
-
-@media (max-width: 767.98px) {
-  #mobile-block { display: flex; }
-  body { overflow: hidden; }
-}
