@@ -1,24 +1,64 @@
 /* Global theme tweaks */
 :root {
   --brand: #0d6efd; /* Bootstrap primary */
+  --brand-2: #6f42c1; /* accent */
+  --card-radius: 12px;
+  --shadow: 0 10px 20px rgba(0,0,0,0.06);
+  --scroll-offset: 96px;
+
+  /* Theme tokens */
+  --text: #202124;
+  --muted: #5f6368;
+  --surface: #ffffff;
+  --surface-90: rgba(255, 255, 255, 0.9);
+  --border: rgba(0,0,0,0.06);
+  --link: #495057;
+
+  --body-bg: radial-gradient(1200px 600px at 0% 0%, rgba(13,110,253,0.08), transparent 50%),
+              radial-gradient(1000px 500px at 100% 20%, rgba(111,66,193,0.06), transparent 50%),
+              #f8f9fa;
+}
+
+.theme-dark {
+  --text: #e6e6e6;
+  --muted: #a6adbb;
+  --surface: #141821;
+  --surface-90: rgba(20,24,33,0.9);
+  --border: rgba(255,255,255,0.08);
+  --link: #cbd5e1;
+  --body-bg: radial-gradient(1200px 600px at 0% 0%, rgba(13,110,253,0.14), transparent 50%),
+              radial-gradient(1000px 500px at 100% 20%, rgba(111,66,193,0.12), transparent 50%),
+              #0e1218;
 }
 
 html, body {
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
-  color: #202124;
+  color: var(--text);
 }
 
-.site-header .navbar-brand {
-  letter-spacing: 0.2px;
+html { scroll-behavior: smooth; }
+
+body.toc-enabled { background: var(--body-bg); }
+
+.site-header { position: sticky; top: 0; z-index: 1020; backdrop-filter: saturate(160%) blur(8px); }
+.site-header .navbar { background: var(--surface-90) !important; }
+.site-header .navbar-brand { letter-spacing: 0.2px; color: var(--text) !important; }
+.site-header .navbar-brand:hover { color: var(--text) !important; opacity: 0.9; }
+
+.section-title { font-weight: 800; letter-spacing: 0.2px; }
+.section-title::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-top: .5rem;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
 }
 
-.section-title {
-  font-weight: 700;
-}
-
-.placeholder-text {
-  color: #5f6368;
-}
+.placeholder-text { color: var(--muted); }
+.text-secondary { color: var(--muted) !important; }
+.text-muted { color: var(--muted) !important; }
 
 /* crop images nicely in ratio boxes */
 .object-cover {
@@ -27,20 +67,18 @@ html, body {
   height: 100%;
 }
 
-/* card hover */
-.card:hover {
-  transform: translateY(-1px);
-  transition: transform 120ms ease;
-}
+/* cards */
+.card { border-radius: var(--card-radius); box-shadow: var(--shadow); border: 1px solid var(--border); background: var(--surface); }
+.card:hover { transform: translateY(-1px); transition: transform 120ms ease; }
 
 /* Image card with hover overlay */
 .image-card {
   position: relative;
   display: inline-block;
   margin: 0; /* reset figure margins */
-  border-radius: 0.5rem;
+  border-radius: var(--card-radius);
   overflow: hidden;
-  background: #fff;
+  background: var(--surface);
 }
 
 .image-card img {
@@ -72,4 +110,58 @@ html, body {
 
 .image-card:hover .overlay-text {
   opacity: 1; /* show overlay text on hover */
+}
+
+/* Sticky Table of Contents */
+.toc {
+  position: fixed;
+  top: 88px; /* keeps clear of sticky header */
+  left: 16px;
+  width: 220px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface-90);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.toc .toc-label { color: var(--muted); letter-spacing: 0.12em; font-size: 0.78rem; margin: 6px 10px 8px; }
+.toc .nav-link { color: var(--link); padding: 6px 10px; border-left: 3px solid transparent; border-radius: 6px; position: relative; z-index: 1; }
+.toc .nav-link::before { content: ''; position: absolute; inset: 0; width: var(--p, 0%); background: rgba(13,110,253,0.14); border-radius: 6px; z-index: 0; transition: width 80ms linear; }
+.toc .nav-link:hover { background: rgba(13,110,253,0.06); color: #0d6efd; }
+.toc .nav-link.active { color: #0d6efd; border-left-color: #0d6efd; background: rgba(13,110,253,0.08); font-weight: 600; }
+
+/* Offset main content to avoid overlap with fixed TOC on desktop */
+@media (min-width: 992px) {
+  body.toc-enabled main { padding-left: 260px; }
+}
+
+/* Improve in-page anchor positioning under sticky header */
+section { scroll-margin-top: var(--scroll-offset); }
+
+/* Dark mode overrides for utility backgrounds/borders from markup */
+.theme-dark .bg-light { background-color: #0f131a !important; }
+.theme-dark .bg-white, .theme-dark footer.bg-white, .theme-dark .navbar.bg-white { background-color: var(--surface) !important; }
+.theme-dark .border-bottom { border-color: var(--border) !important; }
+.theme-dark .border-top { border-color: var(--border) !important; }
+
+/* Top scroll progress bar */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 1035; pointer-events: none; }
+.scroll-progress__bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--brand), var(--brand-2)); box-shadow: 0 0 8px rgba(13,110,253,0.45); }
+
+/* Theme toggle button */
+#theme-toggle { border-color: var(--border) !important; color: var(--text) !important; background: transparent; }
+#theme-toggle:hover { background: rgba(13,110,253,0.06); }
+.theme-dark #theme-toggle:hover { background: rgba(255,255,255,0.06); }
+
+/* Mobile access block (or ig lack of access is a better way of saying it lol) */
+#mobile-block { display: none; position: fixed; inset: 0; z-index: 2000; align-items: center; justify-content: center; padding: 24px; background: var(--body-bg); }
+#mobile-block .mobile-card { width: 100%; max-width: 520px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); padding: 24px; text-align: center; }
+#mobile-block .mobile-emoji { font-size: 2rem; margin-bottom: 8px; }
+#mobile-block .mobile-title { font-weight: 800; margin-bottom: 8px; }
+#mobile-block .mobile-text { color: var(--muted); margin: 0; }
+
+@media (max-width: 767.98px) {
+  #mobile-block { display: flex; }
+  body { overflow: hidden; }
 }
